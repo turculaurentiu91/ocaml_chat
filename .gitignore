@@ -1,0 +1,45 @@
+# OCaml and Dune specific files
+/_build/
+/_opam/
+*.install
+*.install.log
+*.odoc
+*.cmt
+*.cmti
+*.cmi
+*.cmo
+*.cmx
+*.o
+*.annot
+*.docdir
+*.docindex
+*.merlin
+.merlin
+dune-project.lock
+dune-workspace.lock
+dune-workspace
+*.install
+*.install.log
+*.log
+
+# Ignore compiled executables and libraries
+/*.exe
+/*.cma
+/*.cmxa
+/*.cmxs
+/*.a
+
+# Node.js and npm specific files and directories
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Editor/IDE specific files and directories
+.vscode/
+.idea/
+
+# Build artifacts
+/_coverage/
+/_build/
+/_opam/
+

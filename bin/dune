@@ -1,0 +1,6 @@
+(executable
+ (public_name web_hello)
+ (name main)
+ (libraries web_hello dream tyxml tyxml-jsx)
+ (preprocess
+  (pps lwt_ppx tyxml-jsx ppx_yojson_conv)))
