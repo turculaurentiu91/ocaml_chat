@@ -24,20 +24,9 @@ jobs:
           opam install . --deps-only
           opam exec -- dune build --release
 
-      - name: Copy exec to server
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: _build/default/bin/main.exe
-          remote: /home/laurentiu/ocaml_chat/bin/main.exe
-          host: 161.97.155.104
-          username: laurentiu
-          privateKey: ${{ secrets.DEPLOY_SSH_KEY }}
-
-      - name: Copy static to server
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: static
-          remote: /home/laurentiu/ocaml_chat/static
-          host: 161.97.155.104
-          username: laurentiu
-          privateKey: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Deploy to server
+        run: |
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > private_key
+          chmod 600 private_key
+          scp -i private_key ./_build/default/bin/main.exe laurentiu@161.97.155.104:/home/laurentiu/ocaml_chat/bin/main.exe
+          scp -i private_key -r ./static  laurentiu@161.97.155.104:/home/laurentiu/ocaml_chat
