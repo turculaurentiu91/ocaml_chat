@@ -29,7 +29,7 @@ jobs:
         with:
           local: _build/default/bin/main.exe
           remote: /home/laurentiu/ocaml_chat/bin/main.exe
-          host: tlaurentiu.net
+          host: 161.97.155.104
           username: laurentiu
           privateKey: ${{ secrets.DEPLOY_SSH_KEY }}
 
@@ -38,6 +38,6 @@ jobs:
         with:
           local: static
           remote: /home/laurentiu/ocaml_chat/static
-          host: tlaurentiu.net
+          host: 161.97.155.104
           username: laurentiu
           privateKey: ${{ secrets.DEPLOY_SSH_KEY }}
