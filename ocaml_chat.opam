@@ -13,6 +13,11 @@ bug-reports: "https://github.com/turculaurentiu91/ocaml_chat/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.11"}
+  "tyxml"
+  "tyxml-jsx"
+  "lwt"
+  "lwt_ppx"
+  "ppx_yojson_conv"
   "odoc" {with-doc}
 ]
 build: [
