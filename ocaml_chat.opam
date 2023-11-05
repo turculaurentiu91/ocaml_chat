@@ -13,6 +13,8 @@ bug-reports: "https://github.com/turculaurentiu91/ocaml_chat/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.11"}
+  "dream"
+  "reason"
   "tyxml"
   "tyxml-jsx"
   "lwt"

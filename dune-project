@@ -19,7 +19,7 @@
  (name ocaml_chat)
  (synopsis "A chat room implemented in ocaml")
  (description "A chat room implemented in ocaml for me to learn OCaml, it uses websockets and HTMx")
- (depends ocaml dune tyxml tyxml-jsx lwt lwt_ppx ppx_yojson_conv)
+ (depends ocaml dune dream reason tyxml tyxml-jsx lwt lwt_ppx ppx_yojson_conv)
  (tags
   (OCaml Dream Websocket HTMx)))
 
