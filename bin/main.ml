@@ -7,7 +7,7 @@ let clients : (string, Dream.websocket) Hashtbl.t = Hashtbl.create 5
 let forget client_id = Hashtbl.remove clients client_id
 let messages = ref []
 let add_message message = messages := message :: !messages
-let get_messages () = List.rev !messages
+let get_messages () = !messages
 
 let send message =
   Hashtbl.to_seq_values clients
@@ -28,7 +28,6 @@ let handle_client ~username client =
           Template.Messages.to_string ~oob:true
             [ format_message username ro.message ]
         in
-        let content = content ^ Template.Form.to_string () in
         let%lwt () = send content in
         loop ()
     | None ->

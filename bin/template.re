@@ -6,8 +6,10 @@ module Messages = {
   let createElement = (~oob=false, ~messages=[], ()) => {
     let messages = List.map(e => <li> {Html.txt(e)} </li>, messages);
     oob
-      ? <ul _hx_swap_oob="beforeend" id="messages"> ...messages </ul>
-      : <ul id="messages"> ...messages </ul>;
+      ? <ul className="messages" _hx_swap_oob="afterbegin" id="messages">
+          ...messages
+        </ul>
+      : <ul className="messages" id="messages"> ...messages </ul>;
   };
 
   let to_string = (~oob=false, messages) =>
@@ -16,9 +18,25 @@ module Messages = {
 
 module Form = {
   let createElement = () =>
-    <form _ws_send="true" id="form">
-      <input _type="submit" value="Send" />
-      <input _type="text" id="message" name="message" size="64" autofocus=() />
+    <form
+      _ws_send="true"
+      id="form"
+      className="form"
+      _hx_on="htmx:wsAfterSend: this.reset(); this.querySelector('input').focus()">
+      <input _type="text" id="message" name="message" autofocus=() />
+      <button type_="submit" className="button">
+        <Html.svg
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke_width="1.5"
+          stroke="currentColor">
+          <path
+            stroke_linecap="round"
+            stroke_linejoin="round"
+            d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+          />
+        </Html.svg>
+      </button>
     </form>;
 
   let to_string = () => createElement() |> html_to_string;
@@ -28,21 +46,29 @@ module Page = {
   let createElement = (~children, ()) =>
     <html>
       <head>
-        <title> {Html.txt("Hello")} </title>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        />
+        <title> {Html.txt("OCaml Chat")} </title>
         <script _defer="defer" src="/static/htmx.js" />
         <script _defer="defer" src="/static/htmx-ws.js" />
+        <link rel="stylesheet" href="/static/style.css" />
       </head>
-      <body> ...children </body>
+      <body
+        _hx_on="htmx:oobAfterSwap: document.querySelector('input').scrollIntoView(true)">
+        ...children
+      </body>
     </html>;
 };
 
 module Chat = {
   let createElement = (~messages, ()) =>
     <Page>
-      <h1 className="hello"> {Html.txt("Welcome to chat!")} </h1>
-      <div _hx_ext="ws" _ws_connect="/websocket">
-        <Form />
+      <div className="main-container" _hx_ext="ws" _ws_connect="/websocket">
+        <h1 className="title"> {Html.txt("Welcome to ocaml chatroom!")} </h1>
         <Messages messages />
+        <Form />
       </div>
     </Page>;
 
@@ -52,24 +78,22 @@ module Chat = {
 module Login = {
   let createElement = (~request, ()) =>
     <Page>
-      <h1> {Html.txt("Login")} </h1>
-      <p>
-        {Html.txt(
-           "If you don't have an account, this will create one ofr you",
-         )}
-      </p>
-      <form _hx_post="/session" _hx_target="body">
-        {Html.Unsafe.data(Dream.csrf_tag(request))}
-        <div>
-          <label htmlFor="username"> {Html.txt("User name")} </label>
-          <input type_="text" value="" name="username" id="username" />
-        </div>
-        <div>
-          <label htmlFor="password"> {Html.txt("Password")} </label>
-          <input type_="password" value="" name="password" id="password" />
-        </div>
-        <button type_="submit"> {Html.txt("Login")} </button>
-      </form>
+      <div className="login-container">
+        <h1> {Html.txt("Welcome to ocaml chatroom!")} </h1>
+        <p>
+          {Html.txt("You need to setup your username to access the chatroom")}
+        </p>
+        <form _hx_post="/session" _hx_target="body">
+          {Html.Unsafe.data(Dream.csrf_tag(request))}
+          <div className="input-group">
+            <label htmlFor="username"> {Html.txt("User name")} </label>
+            <input type_="text" value="" name="username" id="username" />
+          </div>
+          <button type_="submit" className="button">
+            {Html.txt("Login")}
+          </button>
+        </form>
+      </div>
     </Page>;
 
   let to_string = request => createElement(~request, ()) |> html_to_string;
