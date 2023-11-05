@@ -16,7 +16,7 @@ jobs:
       - name: Setup OCaml
         uses: avsm/setup-ocaml@v2 # Sets up an OCaml environment
         with:
-          ocaml-version: 5.1.0
+          ocaml-compiler: 5.1.0
 
       - name: Build project
         run: |
