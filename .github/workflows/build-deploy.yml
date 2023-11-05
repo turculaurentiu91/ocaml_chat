@@ -1,0 +1,43 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main # Trigger workflow on push to main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # The type of machine to run the job on
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2 # Checks-out your repository under $GITHUB_WORKSPACE
+
+      - name: Setup OCaml
+        uses: avsm/setup-ocaml@v2 # Sets up an OCaml environment
+        with:
+          ocaml-version: 5.1.0
+
+      - name: Build project
+        run: |
+          sudo apt-get install -y libev-dev libgmp-dev pkg-config
+          opam install . --deps-only
+          opam exec -- dune build --release
+
+      - name: Copy exec to server
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: _build/default/bin/main.exe
+          remote: /home/laurentiu/ocaml_chat/bin/main.exe
+          host: tlaurentiu.net
+          username: laurentiu
+          privateKey: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Copy static to server
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: static
+          remote: /home/laurentiu/ocaml_chat/static
+          host: tlaurentiu.net
+          username: laurentiu
+          privateKey: ${{ secrets.DEPLOY_SSH_KEY }}
